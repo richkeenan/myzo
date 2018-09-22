@@ -21,12 +21,13 @@ const Transaction = ({ transaction }) => (
         alignItems: "center"
       }}
     >
-      {transaction.merchant && (
-        <Image
-          style={{ width: 30, height: 30, borderRadius: 5 }}
-          source={{ uri: transaction.merchant.logo }}
-        />
-      )}
+      {transaction.merchant &&
+        transaction.merchant.logo && (
+          <Image
+            style={{ width: 30, height: 30, borderRadius: 5 }}
+            source={{ uri: transaction.merchant.logo }}
+          />
+        )}
       <View style={{ marginLeft: 10 }}>
         {transaction.merchant && <Text>{transaction.merchant.name}</Text>}
         {transaction.counterparty.name && (

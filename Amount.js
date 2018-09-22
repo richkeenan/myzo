@@ -1,23 +1,34 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Amount = ({ amount }) => {
+const Amount = ({ amount, fontWeight = "200", showCurrency, color }) => {
   const amountString =
     amount < 0 ? (amount * -1).toString() : amount.toString();
   const pounds = amountString.slice(0, amountString.length - 2);
   const pence = amountString.slice(amountString.length - 2);
-  const color = amount > 0 ? "#12a829" : "black";
+  const fontColor = color || (amount > 0 ? "#12a829" : "black");
 
   return (
     <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-      {amount > 0 && <Text style={{ color }}>+</Text>}
+      {amount > 0 && <Text style={{ color: fontColor }}>+</Text>}
+      {showCurrency && (
+        <Text style={{ color: fontColor, fontWeight, fontSize: 18 }}>£</Text>
+      )}
+
       <Text
-        style={{ color, fontWeight: "200", fontSize: 30, marginBottom: -4 }}
+        style={{
+          color: fontColor,
+          fontWeight,
+          fontSize: 30,
+          marginBottom: -3
+        }}
       >
-        {pounds}
+        {parseInt(pounds).toLocaleString()}
       </Text>
-      <Text style={{ color }}>.</Text>
-      <Text style={{ color, fontWeight: "200", fontSize: 18 }}>{pence}</Text>
+      <Text style={{ color: fontColor }}>.</Text>
+      <Text style={{ color: fontColor, fontWeight, fontSize: 18 }}>
+        {pence}
+      </Text>
     </View>
   );
 };

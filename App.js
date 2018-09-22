@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, View, SectionList, Text } from "react-native";
 import Transaction from "./Transaction";
-import { getTransactions } from "./api";
+import { getTransactions, getBalance } from "./api";
 import { groupBy, map } from "lodash";
 import isToday from "date-fns/is_today";
 import isYesterday from "date-fns/is_yesterday";
 import format from "date-fns/format";
+import HistoryChart from "./HistoryChart";
 
 const SectionHeader = ({ title }) => (
   <View
@@ -31,8 +32,10 @@ export default class App extends React.Component {
   }
 
   async showTransactions() {
+    const balance = await getBalance();
     const transactions = await getTransactions();
-    this.setState({ transactions });
+
+    this.setState({ transactions, balance });
   }
 
   transactionDate = date => {
@@ -54,14 +57,23 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.transactions.length > 0 && (
-          <SectionList
-            renderItem={({ item }) => <Transaction transaction={item} />}
-            renderSectionHeader={({ section: { title } }) => (
-              <SectionHeader title={title} />
+          <View>
+            <HistoryChart
+              balance={this.state.balance.balance}
+              spentToday={this.state.balance.spend_today}
+              transactions={this.state.transactions}
+            />
+            {this.state.transactions.length > 0 && (
+              <SectionList
+                renderItem={({ item }) => <Transaction transaction={item} />}
+                renderSectionHeader={({ section: { title } }) => (
+                  <SectionHeader title={title} />
+                )}
+                sections={sections}
+                keyExtractor={item => item.id}
+              />
             )}
-            sections={sections}
-            keyExtractor={item => item.id}
-          />
+          </View>
         )}
       </View>
     );
