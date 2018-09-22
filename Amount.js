@@ -4,7 +4,10 @@ import { Text, View } from "react-native";
 const Amount = ({ amount, fontWeight = "200", showCurrency, color }) => {
   const amountString =
     amount < 0 ? (amount * -1).toString() : amount.toString();
-  const pounds = amountString.slice(0, amountString.length - 2);
+  const pounds =
+    amountString.length < 3
+      ? "0"
+      : amountString.slice(0, amountString.length - 2);
   const pence = amountString.slice(amountString.length - 2);
   const fontColor = color || (amount > 0 ? "#12a829" : "black");
 
