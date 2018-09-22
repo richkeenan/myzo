@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, SectionList, Text } from "react-native";
+import { StyleSheet, StatusBar, View, SectionList, Text } from "react-native";
 import Transaction from "./Transaction";
 import { getTransactions, getBalance } from "./api";
 import { groupBy, map } from "lodash";
@@ -56,6 +56,7 @@ export default class App extends React.Component {
 
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
         {this.state.transactions.length > 0 && (
           <View>
             <HistoryChart
@@ -83,7 +84,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 50,
+    top: 0,
     left: 0,
     bottom: 0,
     right: 0
