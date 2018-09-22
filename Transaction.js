@@ -9,6 +9,8 @@ const Transaction = ({ transaction }) => (
       borderColor: "lightgrey",
       flexDirection: "row",
       justifyContent: "space-between",
+      marginLeft: 10,
+      marginRight: 10,
       paddingTop: 10,
       paddingBottom: 10
     }}
@@ -19,12 +21,17 @@ const Transaction = ({ transaction }) => (
         alignItems: "center"
       }}
     >
-      <Image
-        style={{ width: 30, height: 30, borderRadius: 5 }}
-        source={{ uri: transaction.merchant.logo }}
-      />
+      {transaction.merchant && (
+        <Image
+          style={{ width: 30, height: 30, borderRadius: 5 }}
+          source={{ uri: transaction.merchant.logo }}
+        />
+      )}
       <View style={{ marginLeft: 10 }}>
-        <Text>{transaction.merchant.name}</Text>
+        {transaction.merchant && <Text>{transaction.merchant.name}</Text>}
+        {transaction.counterparty.name && (
+          <Text>{transaction.counterparty.name}</Text>
+        )}
         {transaction.notes && (
           <Text style={{ fontSize: 11, color: "grey" }}>
             {transaction.notes}

@@ -5,7 +5,7 @@ const accountId = config.MONZO_ACCOUNT_ID;
 
 const getTransactions = async () => {
   const response = await fetch(
-    `https://api.monzo.com/transactions?expand[]=merchant&account_id=${accountId}&since=2018-09-20T23:00:00Z`,
+    `https://api.monzo.com/transactions?expand[]=merchant&account_id=${accountId}&since=2018-09-17T23:00:00Z`,
     {
       method: "get",
       headers: new Headers({
@@ -16,8 +16,7 @@ const getTransactions = async () => {
 
   // Let's assume it worked for now
   const json = await response.json();
-
-  return json;
+  return json.transactions.reverse();
 };
 
 export { getTransactions };
