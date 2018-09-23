@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
 import PropTypes from "prop-types";
-import Amount from "./Amount";
+import Amount from "../../components/Amount";
 
 class Transaction extends React.PureComponent {
   render() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { getTransactions, getBalance } from "./api";
+import { getTransactions, getBalance } from "../../api";
 import { groupBy, map } from "lodash";
 import isToday from "date-fns/is_today";
 import isYesterday from "date-fns/is_yesterday";

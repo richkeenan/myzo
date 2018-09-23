@@ -10,7 +10,7 @@ import {
   VictoryStack,
   VictoryGroup
 } from "victory-native";
-import Amount from "./Amount";
+import Amount from "../../components/Amount";
 
 const AccountBalance = ({ balance }) => (
   <View style={{ margin: 10 }}>
@@ -37,7 +37,7 @@ const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
   let cumBalance = balance;
   let selectedBalance = 0;
   const data = transactions.map((t, i) => {
-    const d = { x: new Date(t.rawDate), y: cumBalance / 10000 };
+    const d = { x: new Date(t.rawDate), y: cumBalance };
     const y = t.data.map(d => d.amount).reduce((prev, curr) => prev + curr, 0);
     cumBalance -= y;
 
@@ -73,7 +73,7 @@ const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
             </LinearGradient>
           </Defs>
           <VictoryStack
-            domain={{ y: [min - min * 0.01, max] }}
+            domain={{ y: [min - min * 0.1, max] }}
             data={data}
             scale={{ x: "time" }}
             padding={0}

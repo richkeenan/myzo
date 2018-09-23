@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { MapView } from "expo";
+import PropTypes from "prop-types";
 
 const TransactionDetails = ({ transaction }) => {
   const latitude = transaction.merchant.address.latitude;
@@ -25,6 +25,10 @@ const TransactionDetails = ({ transaction }) => {
       <MapView.Marker coordinate={coordinate} />
     </MapView>
   );
+};
+
+TransactionDetails.propTypes = {
+  transaction: PropTypes.object.isRequired
 };
 
 export default TransactionDetails;

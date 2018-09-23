@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import PropTypes from "prop-types";
 import TransactionDetails from "./TransactionDetails";
 
 const TransactionDetailsCard = ({ location }) => {
@@ -8,6 +8,10 @@ const TransactionDetailsCard = ({ location }) => {
   const transaction = state.transaction;
 
   return <TransactionDetails transaction={transaction} />;
+};
+
+TransactionDetailsCard.propTypes = {
+  location: PropTypes.object
 };
 
 export default TransactionDetailsCard;

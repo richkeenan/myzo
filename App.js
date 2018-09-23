@@ -6,26 +6,10 @@ import {
   TouchableHighlight,
   View
 } from "react-native";
-import { NativeRouter, Link, Route } from "react-router-native";
+import { NativeRouter } from "react-router-native";
 import { Navigation, Card } from "react-router-navigation";
-import TransactionsCard from "./TransactionsCard";
-import TransactionDetailsCard from "./TransactionDetailsCard";
-
-// Todo - make this not horrific
-const renderNavBar = props => (
-  <TouchableHighlight
-    style={{
-      alignItems: "center",
-      backgroundColor: "#DDDDDD",
-      padding: 10
-    }}
-    onPress={props.history.goBack}
-  >
-    <View>
-      <Text>Go Back</Text>
-    </View>
-  </TouchableHighlight>
-);
+import TransactionsCard from "./cards/home/TransactionsCard";
+import TransactionDetailsCard from "./cards/details/TransactionDetailsCard";
 
 export default class App extends React.Component {
   render() {
@@ -52,6 +36,22 @@ export default class App extends React.Component {
     );
   }
 }
+
+// Todo - make this not horrific
+const renderNavBar = props => (
+  <TouchableHighlight
+    style={{
+      alignItems: "center",
+      backgroundColor: "#DDDDDD",
+      padding: 10
+    }}
+    onPress={props.history.goBack}
+  >
+    <View>
+      <Text>Go Back</Text>
+    </View>
+  </TouchableHighlight>
+);
 
 const styles = StyleSheet.create({
   container: {
