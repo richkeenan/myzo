@@ -1,7 +1,14 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { Defs, Stop, LinearGradient } from "react-native-svg";
-import { VictoryArea, VictoryStack, VictoryGroup } from "victory-native";
+import {
+  VictoryArea,
+  VictoryLine,
+  VictoryChart,
+  VictoryScatter,
+  VictoryStack,
+  VictoryGroup
+} from "victory-native";
 import Amount from "./Amount";
 
 const AccountBalance = ({ balance }) => (
@@ -20,13 +27,19 @@ const SpentToday = ({ spentToday }) => (
   </View>
 );
 
-const HistoryChart = ({ balance, spentToday, transactions }) => {
+const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
   const currentBalance = -balance;
   let cumBalance = balance;
-  const data = transactions.map(t => {
-    const d = { x: new Date(t.created), y: cumBalance / 10000 };
+  let selectedBalance = 0;
+  const data = transactions.map((t, i) => {
+    const d = { x: new Date(t.rawDate), y: cumBalance / 10000 };
+    const y = t.data.map(d => d.amount).reduce((prev, curr) => prev + curr, 0);
+    cumBalance -= y;
 
-    cumBalance -= t.amount;
+    if (t.rawDate === selectedDate) {
+      selectedBalance = d.y;
+    }
+
     return d;
   });
 
@@ -35,7 +48,7 @@ const HistoryChart = ({ balance, spentToday, transactions }) => {
 
   return (
     <View
-      style={{ borderWidth: 1, paddingTop: 40, backgroundColor: "#032151" }}
+      style={{ borderWidth: 1, paddingTop: 20, backgroundColor: "#032151" }}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <AccountBalance balance={currentBalance} />
@@ -56,9 +69,13 @@ const HistoryChart = ({ balance, spentToday, transactions }) => {
               <Stop offset="90%" stopColor="#2064a0" stopOpacity="0" />
             </LinearGradient>
           </Defs>
-          <VictoryStack data={data} scale={{ x: "time" }} padding={0}>
+          <VictoryStack
+            domain={{ y: [min - min * 0.01, max] }}
+            data={data}
+            scale={{ x: "time" }}
+            padding={0}
+          >
             <VictoryArea
-              domain={{ y: [min - min * 0.01, max] }}
               data={data}
               style={{
                 data: {
@@ -69,6 +86,32 @@ const HistoryChart = ({ balance, spentToday, transactions }) => {
               }}
             />
           </VictoryStack>
+          {selectedDate &&
+            selectedBalance && (
+              <VictoryChart
+                domain={{ y: [min - min * 0.01, max] }}
+                data={data}
+                scale={{ x: "time" }}
+                padding={0}
+              >
+                <VictoryLine
+                  style={{
+                    data: { stroke: "white", strokeWidth: 2 }
+                  }}
+                  x={() => new Date(selectedDate)}
+                />
+                <VictoryScatter
+                  style={{ data: { fill: "white" } }}
+                  data={[
+                    {
+                      x: new Date(selectedDate),
+                      y: selectedBalance,
+                      size: 4
+                    }
+                  ]}
+                />
+              </VictoryChart>
+            )}
         </VictoryGroup>
       </View>
     </View>

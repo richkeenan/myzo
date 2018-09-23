@@ -8,24 +8,41 @@ import isYesterday from "date-fns/is_yesterday";
 import format from "date-fns/format";
 import HistoryChart from "./HistoryChart";
 
-const SectionHeader = ({ title }) => (
-  <View
-    style={{
-      paddingTop: 5,
-      paddingBottom: 5,
-      backgroundColor: "#f4f4f4",
-      borderBottomWidth: 1,
-      borderColor: "lightgrey"
-    }}
-  >
-    <Text style={{ margin: 5, marginLeft: 10 }}>{title}</Text>;
-  </View>
-);
+class SectionHeader extends React.PureComponent {
+  render() {
+    return (
+      <View
+        style={{
+          paddingTop: 5,
+          paddingBottom: 5,
+          backgroundColor: "#f4f4f4",
+          borderBottomWidth: 1,
+          borderColor: "lightgrey"
+        }}
+      >
+        <Text style={{ margin: 5, marginLeft: 10 }}>{this.props.title}</Text>;
+      </View>
+    );
+  }
+}
+
+const transactionDate = date => {
+  if (isToday(date)) return "Today";
+  if (isYesterday(date)) return "Yesterday";
+
+  return format(date, "dddd DD MMMM");
+};
 
 export default class App extends React.Component {
   state = {
-    transactions: []
+    transactions: [],
+    selectedDate: null
   };
+
+  constructor(props) {
+    super(props);
+    this.onViewableItemsChanged = this.onViewableItemsChanged.bind(this);
+  }
 
   async componentDidMount() {
     this.showTransactions();
@@ -38,20 +55,26 @@ export default class App extends React.Component {
     this.setState({ transactions, balance });
   }
 
-  transactionDate = date => {
-    if (isToday(date)) return "Today";
-    if (isYesterday(date)) return "Yesterday";
-
-    return format(date, "dddd DD MMMM");
-  };
+  onViewableItemsChanged(result) {
+    const selectedDate = result.viewableItems[0].item.rawDate;
+    if (selectedDate) {
+      this.setState(prevState => {
+        if (prevState.selectedDate === selectedDate) {
+          return null;
+        } else {
+          return { selectedDate: selectedDate };
+        }
+      });
+    }
+  }
 
   render() {
     const byDate = groupBy(this.state.transactions, t =>
-      this.transactionDate(t.created)
+      format(t.created, "YYYY-MM-DD")
     );
 
     const sections = map(byDate, function(value, prop) {
-      return { title: prop, data: value };
+      return { title: transactionDate(prop), data: value, rawDate: prop };
     });
 
     return (
@@ -62,10 +85,12 @@ export default class App extends React.Component {
             <HistoryChart
               balance={this.state.balance.balance}
               spentToday={this.state.balance.spend_today}
-              transactions={this.state.transactions}
+              transactions={sections}
+              selectedDate={this.state.selectedDate}
             />
             {this.state.transactions.length > 0 && (
               <SectionList
+                onViewableItemsChanged={this.onViewableItemsChanged}
                 renderItem={({ item }) => <Transaction transaction={item} />}
                 renderSectionHeader={({ section: { title } }) => (
                   <SectionHeader title={title} />
