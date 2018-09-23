@@ -8,7 +8,7 @@ const Amount = ({ amount, fontWeight = "200", showCurrency, color }) => {
     amountString.length < 3
       ? "0"
       : amountString.slice(0, amountString.length - 2);
-  const pence = amountString.slice(amountString.length - 2);
+  const pence = amountString.slice(amountString.length - 2).padEnd(2, "0");
   const fontColor = color || (amount > 0 ? "#12a829" : "black");
 
   return (

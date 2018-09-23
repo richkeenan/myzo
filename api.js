@@ -3,6 +3,21 @@ import config from "./config";
 const token = config.MONZO_TOKEN;
 const accountId = config.MONZO_ACCOUNT_ID;
 
+// Hack: Don't show friend/flatmate names in screen recordings
+const anonymiseCounterparty = t => {
+  if (t.merchant) return t;
+  if (!t.counterparty) return t;
+
+  return {
+    counterparty: {
+      name: "A. Nonymous"
+    },
+    amount: t.amount,
+    notes: "Probably rent",
+    created: t.created
+  };
+};
+
 const getBalance = async () => {
   const response = await fetch(
     `https://api.monzo.com/balance?account_id=${accountId}`,
@@ -15,6 +30,8 @@ const getBalance = async () => {
   );
 
   const json = await response.json();
+
+  json.balance = 314159; // Easter egg for demos
 
   return json;
 };
@@ -33,12 +50,7 @@ const getTransactions = async () => {
   // Let's assume it worked for now
   const json = await response.json();
 
-  // Todo remove filter to add rent payment back in
-  return (
-    json.transactions
-      // .filter(x => x.amount < 800)
-      .reverse()
-  );
+  return json.transactions.map(anonymiseCounterparty).reverse();
 };
 
 export { getTransactions, getBalance };

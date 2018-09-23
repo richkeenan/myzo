@@ -19,11 +19,9 @@ const AccountBalance = ({ balance }) => (
 );
 
 const SpentToday = ({ spentToday }) => (
-  <View style={{ margin: 10 }}>
+  <View style={{ margin: 10, alignItems: "flex-end" }}>
     <Amount color="white" fontWeight="300" showCurrency amount={spentToday} />
-    <Text style={{ textAlign: "right", fontSize: 10, color: "grey" }}>
-      SPENT TODAY
-    </Text>
+    <Text style={{ fontSize: 10, color: "grey" }}>SPENT TODAY</Text>
   </View>
 );
 
