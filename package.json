@@ -35,6 +35,9 @@
     "prop-types": "^15.6.2",
     "react": "16.3.1",
     "react-native": "~0.55.2",
+    "react-router": "^4.3.1",
+    "react-router-native": "^4.3.0",
+    "react-router-navigation": "^1.0.0-rc.4",
     "victory-native": "^30.4.0"
   }
 }

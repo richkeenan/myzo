@@ -6,6 +6,7 @@ import isYesterday from "date-fns/is_yesterday";
 import format from "date-fns/format";
 import Transaction from "./Transaction";
 import SectionHeader from "./SectionHeader";
+import { Link } from "react-router-native";
 
 class Transactions extends React.Component {
   transactionDate = date => {
@@ -24,7 +25,11 @@ class Transactions extends React.Component {
     return (
       <SectionList
         onViewableItemsChanged={this.onViewableItemsChanged}
-        renderItem={({ item }) => <Transaction transaction={item} />}
+        renderItem={({ item }) => (
+          <Link to={{ pathname: "/transaction", state: { transaction: item } }}>
+            <Transaction transaction={item} />
+          </Link>
+        )}
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader title={title} />
         )}

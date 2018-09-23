@@ -1,82 +1,53 @@
 import React from "react";
-import { StyleSheet, StatusBar, View } from "react-native";
-import { getTransactions, getBalance } from "./api";
-import { groupBy, map } from "lodash";
-import isToday from "date-fns/is_today";
-import isYesterday from "date-fns/is_yesterday";
-import format from "date-fns/format";
-import HistoryChart from "./HistoryChart";
-import Transactions from "./Transactions";
+import {
+  StyleSheet,
+  StatusBar,
+  Text,
+  TouchableHighlight,
+  View
+} from "react-native";
+import { NativeRouter, Link, Route } from "react-router-native";
+import { Navigation, Card } from "react-router-navigation";
+import TransactionsCard from "./TransactionsCard";
+import TransactionDetailsCard from "./TransactionDetailsCard";
 
-const transactionDate = date => {
-  if (isToday(date)) return "Today";
-  if (isYesterday(date)) return "Yesterday";
-
-  return format(date, "dddd DD MMMM");
-};
+// Todo - make this not horrific
+const renderNavBar = props => (
+  <TouchableHighlight
+    style={{
+      alignItems: "center",
+      backgroundColor: "#DDDDDD",
+      padding: 10
+    }}
+    onPress={props.history.goBack}
+  >
+    <View>
+      <Text>Go Back</Text>
+    </View>
+  </TouchableHighlight>
+);
 
 export default class App extends React.Component {
-  state = {
-    transactions: [],
-    selectedDate: null
-  };
-
-  constructor(props) {
-    super(props);
-    this.onSelectedDateChanged = this.onSelectedDateChanged.bind(this);
-  }
-
-  async componentDidMount() {
-    this.showTransactions();
-  }
-
-  async showTransactions() {
-    const balance = await getBalance();
-    const transactions = await getTransactions();
-
-    this.setState({ transactions, balance });
-  }
-
-  onSelectedDateChanged(selectedDate) {
-    if (selectedDate) {
-      this.setState(prevState => {
-        if (prevState.selectedDate === selectedDate) {
-          return null;
-        } else {
-          return { selectedDate: selectedDate };
-        }
-      });
-    }
-  }
-
   render() {
-    const byDate = groupBy(this.state.transactions, t =>
-      format(t.created, "YYYY-MM-DD")
-    );
-
-    const sections = map(byDate, function(value, prop) {
-      return { title: transactionDate(prop), data: value, rawDate: prop };
-    });
-
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        {this.state.transactions.length > 0 && (
-          <View>
-            <HistoryChart
-              balance={this.state.balance.balance}
-              spentToday={this.state.balance.spend_today}
-              transactions={sections}
-              selectedDate={this.state.selectedDate}
+        <NativeRouter>
+          <Navigation navBarStyle={{ backgroundColor: "white" }}>
+            <Card
+              hideNavBar
+              exact
+              path="/"
+              render={() => <TransactionsCard />}
             />
-            {this.state.transactions.length > 0 && (
-              <Transactions
-                sections={sections}
-                onSelectedDateChanged={this.onSelectedDateChanged}
-              />
-            )}
-          </View>
-        )}
+
+            <Card
+              renderLeftButton={renderNavBar}
+              path="/transaction"
+              render={props => <TransactionDetailsCard {...props} />}
+            />
+          </Navigation>
+        </NativeRouter>
       </View>
     );
   }

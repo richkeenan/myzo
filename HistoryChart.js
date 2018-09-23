@@ -52,9 +52,7 @@ const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
   const max = Math.max(...data.map(d => d.y));
 
   return (
-    <View
-      style={{ borderWidth: 1, paddingTop: 20, backgroundColor: "#032151" }}
-    >
+    <View style={{ paddingTop: 20, backgroundColor: "#032151" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <AccountBalance balance={currentBalance} />
         <SpentToday spentToday={spentToday} />
