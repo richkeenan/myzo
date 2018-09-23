@@ -23,9 +23,9 @@ const getBalance = async () => {
     `https://api.monzo.com/balance?account_id=${accountId}`,
     {
       method: "get",
-      headers: new Headers({
+      headers: {
         Authorization: `Bearer ${token}`
-      })
+      }
     }
   );
 
@@ -41,9 +41,9 @@ const getTransactions = async () => {
     `https://api.monzo.com/transactions?expand[]=merchant&account_id=${accountId}&since=2018-08-28T23:00:00Z`,
     {
       method: "get",
-      headers: new Headers({
+      headers: {
         Authorization: `Bearer ${token}`
-      })
+      }
     }
   );
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
+import PropTypes from "prop-types";
 import { Defs, Stop, LinearGradient } from "react-native-svg";
 import {
   VictoryArea,
@@ -17,6 +18,9 @@ const AccountBalance = ({ balance }) => (
     <Text style={{ fontSize: 10, color: "grey" }}>ACCOUNT BALANCE</Text>
   </View>
 );
+AccountBalance.propTypes = {
+  balance: PropTypes.number.isRequired
+};
 
 const SpentToday = ({ spentToday }) => (
   <View style={{ margin: 10, alignItems: "flex-end" }}>
@@ -24,6 +28,9 @@ const SpentToday = ({ spentToday }) => (
     <Text style={{ fontSize: 10, color: "grey" }}>SPENT TODAY</Text>
   </View>
 );
+SpentToday.propTypes = {
+  spentToday: PropTypes.number.isRequired
+};
 
 const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
   const currentBalance = -balance;
@@ -114,6 +121,13 @@ const HistoryChart = ({ balance, spentToday, transactions, selectedDate }) => {
       </View>
     </View>
   );
+};
+
+HistoryChart.propTypes = {
+  balance: PropTypes.number.isRequired,
+  spentToday: PropTypes.number.isRequired,
+  transactions: PropTypes.array.isRequired,
+  selectedDate: PropTypes.string
 };
 
 export default HistoryChart;

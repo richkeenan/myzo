@@ -1,30 +1,12 @@
 import React from "react";
-import { StyleSheet, StatusBar, View, SectionList, Text } from "react-native";
-import Transaction from "./Transaction";
+import { StyleSheet, StatusBar, View } from "react-native";
 import { getTransactions, getBalance } from "./api";
 import { groupBy, map } from "lodash";
 import isToday from "date-fns/is_today";
 import isYesterday from "date-fns/is_yesterday";
 import format from "date-fns/format";
 import HistoryChart from "./HistoryChart";
-
-class SectionHeader extends React.PureComponent {
-  render() {
-    return (
-      <View
-        style={{
-          paddingTop: 5,
-          paddingBottom: 5,
-          backgroundColor: "#f4f4f4",
-          borderBottomWidth: 1,
-          borderColor: "lightgrey"
-        }}
-      >
-        <Text style={{ margin: 5, marginLeft: 10 }}>{this.props.title}</Text>;
-      </View>
-    );
-  }
-}
+import Transactions from "./Transactions";
 
 const transactionDate = date => {
   if (isToday(date)) return "Today";
@@ -41,7 +23,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onViewableItemsChanged = this.onViewableItemsChanged.bind(this);
+    this.onSelectedDateChanged = this.onSelectedDateChanged.bind(this);
   }
 
   async componentDidMount() {
@@ -55,8 +37,7 @@ export default class App extends React.Component {
     this.setState({ transactions, balance });
   }
 
-  onViewableItemsChanged(result) {
-    const selectedDate = result.viewableItems[0].item.rawDate;
+  onSelectedDateChanged(selectedDate) {
     if (selectedDate) {
       this.setState(prevState => {
         if (prevState.selectedDate === selectedDate) {
@@ -89,14 +70,9 @@ export default class App extends React.Component {
               selectedDate={this.state.selectedDate}
             />
             {this.state.transactions.length > 0 && (
-              <SectionList
-                onViewableItemsChanged={this.onViewableItemsChanged}
-                renderItem={({ item }) => <Transaction transaction={item} />}
-                renderSectionHeader={({ section: { title } }) => (
-                  <SectionHeader title={title} />
-                )}
+              <Transactions
                 sections={sections}
-                keyExtractor={item => item.id}
+                onSelectedDateChanged={this.onSelectedDateChanged}
               />
             )}
           </View>

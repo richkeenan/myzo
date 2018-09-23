@@ -1,0 +1,8 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard", "plugin:react/recommended", "prettier"],
+  "globals": {
+    "fetch": false
+  },
+  "rules": { "prefer-const": "warn" }
+}

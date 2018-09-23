@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
+import PropTypes from "prop-types";
 import Amount from "./Amount";
 
 class Transaction extends React.PureComponent {
@@ -48,5 +49,9 @@ class Transaction extends React.PureComponent {
     );
   }
 }
+
+Transaction.propTypes = {
+  transaction: PropTypes.object.isRequired
+};
 
 export default Transaction;

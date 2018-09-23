@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, View } from "react-native";
+import PropTypes from "prop-types";
 
-const Amount = ({ amount, fontWeight = "200", showCurrency, color }) => {
+const Amount = ({ amount, showCurrency, color, fontWeight = "200" }) => {
   const amountString =
     amount < 0 ? (amount * -1).toString() : amount.toString();
   const pounds =
@@ -34,6 +35,13 @@ const Amount = ({ amount, fontWeight = "200", showCurrency, color }) => {
       </Text>
     </View>
   );
+};
+
+Amount.propTypes = {
+  amount: PropTypes.number.isRequired,
+  fontWeight: PropTypes.string,
+  showCurrency: PropTypes.bool,
+  color: PropTypes.string
 };
 
 export default Amount;
